@@ -37,12 +37,15 @@ For each issue:
 - If no issues found, say "✓ কোনো ইস্যু পাওয়া যায়নি"
 """
 
-    response = client.models.generate_content(
+    try:
+        response = client.models.generate_content(
         model= modelname,
         contents=[files, prompt]
     )
 
-    return response.text
+        return response.text
+    except Exception as e:
+        return e
 
 
 def for_code_solution(files):
@@ -72,42 +75,48 @@ For each issue:
 - Always respond in Bengali
 """
 
-    response = client.models.generate_content(
+    try:
+        response = client.models.generate_content(
         model= modelname,
         contents=[files, prompt]
     )
 
-    return response.text
+        return response.text
+    except Exception as e:
+        return e
 
 def solution_for_hints(files):
     prompt = """
 Always respond in Bengali
-You are a high‑level problem‑solving and debugging assistant.  
-Your task is to analyze the user's described issue and provide:
+You are an expert code debugger. Your job is to identify all issues in the code and report them in Bengali. Do NOT provide any solutions or fixes.
+## Your Tasks:
+1. **Syntax Errors** - Which line has what mistake
+2. **Logic Problems** - Where unexpected results might occur
+3. **Runtime Errors** - Which inputs will cause the program to crash
+4. **Performance Issues** - Where the code will be slow
+5. **Best Practice Violations** - Code style or convention problems
 
-1. Clear explanation of what is causing the problem  
-2. Step‑by‑step solution in plain language  
-3. What the user should check or verify  
-4. Best practices to avoid the issue in the future  
-5. Alternative approaches if the main solution doesn’t work  
-6. Important warnings or edge cases  
+role:
+your are a great code error explainer.
 
-Rules:
-- Do NOT write or generate any code.  
-- Explain everything conceptually and logically.  
-- Keep solutions practical and easy to follow.  
-- If the problem description is incomplete, ask what is missing.  
-- Provide multiple possible causes when relevant.  
-- Always respond in structured sections with headings.
+## Output Format:
+For each issue:
+- only solution step by step with text and no code
 
-Now wait for the user to describe their issue.
-
+## Important:
+- Only identify problems, do NOT provide solutions
+- Always mention line numbers
+- Always respond in Bengali
+- If no issues found, say "✓ কোনো ইস্যু পাওয়া যায়নি"
 """
-    response = client.models.generate_content(
+    try:
+        response = client.models.generate_content(
         model= modelname,
         contents=[files, prompt]
     )
 
-    return response.text
+        return response.text
+    except Exception as e:
+        return e
 
 
